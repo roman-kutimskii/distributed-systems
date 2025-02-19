@@ -1,20 +1,23 @@
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using StackExchange.Redis;
 
 namespace Valuator.Pages;
 
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
+    private readonly IDatabase _redisDb;
 
-    public IndexModel(ILogger<IndexModel> logger)
+    public IndexModel(ILogger<IndexModel> logger, IConnectionMultiplexer redis)
     {
         _logger = logger;
+        _redisDb = redis.GetDatabase();
     }
 
     public void OnGet()
     {
-
     }
 
     public IActionResult OnPost(string text)
@@ -23,15 +26,45 @@ public class IndexModel : PageModel
 
         string id = Guid.NewGuid().ToString();
 
+        string similarityKey = "SIMILARITY-" + id;
+        double similarity = CalculateSimilarity(text);
+        _redisDb.StringSet(similarityKey, similarity);
+
         string textKey = "TEXT-" + id;
-        // TODO: (pa1) сохранить в БД (Redis) text по ключу textKey
+        _redisDb.StringSet(textKey, text);
 
         string rankKey = "RANK-" + id;
-        // TODO: (pa1) посчитать rank и сохранить в БД (Redis) по ключу rankKey
-
-        string similarityKey = "SIMILARITY-" + id;
-        // TODO: (pa1) посчитать similarity и сохранить в БД (Redis) по ключу similarityKey
+        double rank = CalculateRank(text);
+        _redisDb.StringSet(rankKey, rank);
 
         return Redirect($"summary?id={id}");
+    }
+
+    private double CalculateRank(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return 0;
+        }
+
+        var pattern = new Regex(@"[^\p{L}]");
+        double count = pattern.Matches(text).Count;
+        return count / text.Length;
+    }
+
+    private double CalculateSimilarity(string text)
+    {
+        var keys = _redisDb.Multiplexer.GetServer(_redisDb.Multiplexer.GetEndPoints().First()).Keys(pattern: "TEXT-*");
+
+        foreach (var key in keys)
+        {
+            var storedText = _redisDb.StringGet(key);
+            if (storedText == text)
+            {
+                return 1;
+            }
+        }
+
+        return 0;
     }
 }
