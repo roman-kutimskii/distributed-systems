@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using StackExchange.Redis;
@@ -47,9 +46,14 @@ public class IndexModel : PageModel
             return 0;
         }
 
-        var pattern = new Regex(@"[^\p{L}]");
-        double count = pattern.Matches(text).Count;
-        return count / text.Length;
+        double count = 0;
+
+        foreach (var character in text)
+        {
+            count += Char.IsLetter(Char.ToLower(character)) ? 1 : 0;
+        }
+
+        return 1 - count / text.Length;
     }
 
     private double CalculateSimilarity(string text)
