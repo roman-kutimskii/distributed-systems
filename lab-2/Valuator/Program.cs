@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 
 namespace Valuator;
@@ -8,9 +9,12 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"/keys"))
+            .SetApplicationName("Valuator");
+
         // Add services to the container.
         builder.Services.AddRazorPages();
-        
+
         var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
         var redis = ConnectionMultiplexer.Connect(redisConnectionString);
         builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
@@ -22,6 +26,7 @@ public class Program
         {
             app.UseExceptionHandler("/Error");
         }
+
         app.UseStaticFiles();
 
         app.UseRouting();
