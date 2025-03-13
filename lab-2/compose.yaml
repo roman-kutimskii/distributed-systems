@@ -1,10 +1,12 @@
-﻿services:
+﻿version: '3.8'
+
+services:
   redis:
     image: redis
     container_name: redis
     volumes:
       - redis-data:/data
-  
+
   valuator-1:
     image: valuator
     build:
@@ -14,6 +16,8 @@
       - redis
     volumes:
       - ./keys:/keys
+    ports:
+      - "5001:8080"
 
   valuator-2:
     image: valuator
@@ -24,7 +28,9 @@
       - redis
     volumes:
       - ./keys:/keys
-        
+    ports:
+      - "5002:8080"
+
   valuator-3:
     image: valuator
     build:
@@ -34,6 +40,8 @@
       - redis
     volumes:
       - ./keys:/keys
+    ports:
+      - "5003:8080"
 
   valuator-4:
     image: valuator
@@ -44,7 +52,9 @@
       - redis
     volumes:
       - ./keys:/keys
-  
+    ports:
+      - "5004:8080"
+
   nginx:
     image: nginx
     container_name: nginx
@@ -57,6 +67,8 @@
     depends_on:
       - valuator-1
       - valuator-2
+      - valuator-3
+      - valuator-4
 
 volumes:
   redis-data:
