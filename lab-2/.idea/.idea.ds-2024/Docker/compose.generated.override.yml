@@ -1,0 +1,82 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  valuator-1:
+    build:
+      context: "D:\\RiderProjects\\distributed-systems\\lab-2"
+      dockerfile: "Valuator/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Valuator.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net8.0/Valuator.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "valuator:dev"
+    ports: []
+    volumes:
+    - "D:\\RiderProjects\\distributed-systems\\lab-2\\Valuator:/app:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-2:/src:rw"
+    - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
+  valuator-2:
+    build:
+      context: "D:\\RiderProjects\\distributed-systems\\lab-2"
+      dockerfile: "Valuator/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Valuator.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net8.0/Valuator.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "valuator:dev"
+    ports: []
+    volumes:
+    - "D:\\RiderProjects\\distributed-systems\\lab-2\\Valuator:/app:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-2:/src:rw"
+    - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
+  valuator-3:
+    build:
+      context: "D:\\RiderProjects\\distributed-systems\\lab-2"
+      dockerfile: "Valuator/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Valuator.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net8.0/Valuator.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "valuator:dev"
+    ports: []
+    volumes:
+    - "D:\\RiderProjects\\distributed-systems\\lab-2\\Valuator:/app:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-2:/src:rw"
+    - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
+  valuator-4:
+    build:
+      context: "D:\\RiderProjects\\distributed-systems\\lab-2"
+      dockerfile: "Valuator/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Valuator.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net8.0/Valuator.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "valuator:dev"
+    ports: []
+    volumes:
+    - "D:\\RiderProjects\\distributed-systems\\lab-2\\Valuator:/app:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-2:/src:rw"
+    - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"

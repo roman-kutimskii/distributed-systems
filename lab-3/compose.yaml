@@ -1,0 +1,14 @@
+﻿services:
+  valuator:
+    image: valuator
+    build:
+      context: .
+      dockerfile: Valuator/Dockerfile
+    ports:
+      - 8080:8080
+
+  rankcalculator:
+    image: rankcalculator
+    build:
+      context: .
+      dockerfile: RankCalculator/Dockerfile
