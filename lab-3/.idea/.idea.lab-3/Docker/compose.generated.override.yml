@@ -2,7 +2,7 @@
 services:
   rankcalculator:
     build:
-      context: "C:\\Users\\roman\\RiderProjects\\lab-3"
+      context: "D:\\RiderProjects\\distributed-systems\\lab-3"
       dockerfile: "RankCalculator/Dockerfile"
       target: "base"
     command: []
@@ -15,13 +15,13 @@ services:
     image: "rankcalculator:dev"
     ports: []
     volumes:
-    - "C:\\Users\\roman\\RiderProjects\\lab-3\\RankCalculator:/app:rw"
-    - "C:\\Users\\roman\\RiderProjects\\lab-3:/src:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-3\\RankCalculator:/app:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-3:/src:rw"
     - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
     working_dir: "/app"
   valuator:
     build:
-      context: "C:\\Users\\roman\\RiderProjects\\lab-3"
+      context: "D:\\RiderProjects\\distributed-systems\\lab-3"
       dockerfile: "Valuator/Dockerfile"
       target: "base"
     command: []
@@ -35,7 +35,7 @@ services:
     image: "valuator:dev"
     ports: []
     volumes:
-    - "C:\\Users\\roman\\RiderProjects\\lab-3\\Valuator:/app:rw"
-    - "C:\\Users\\roman\\RiderProjects\\lab-3:/src:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-3\\Valuator:/app:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-3:/src:rw"
     - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
     working_dir: "/app"
