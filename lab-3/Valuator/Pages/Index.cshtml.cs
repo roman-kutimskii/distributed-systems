@@ -5,8 +5,7 @@ using StackExchange.Redis;
 
 namespace Valuator.Pages;
 
-public class IndexModel(IConnectionMultiplexer redis, IConnection rabbitMqConnection)
-    : PageModel
+public class IndexModel(IConnectionMultiplexer redis, IConnection rabbitMqConnection) : PageModel
 {
     private readonly IDatabase _redisDb = redis.GetDatabase();
 
@@ -18,7 +17,7 @@ public class IndexModel(IConnectionMultiplexer redis, IConnection rabbitMqConnec
     {
         var id = Guid.NewGuid().ToString();
 
-        _redisDb.StringSet(id, text);
+        _redisDb.StringSet("TEXT-" + id, text);
 
         await using var channel = await rabbitMqConnection.CreateChannelAsync();
         await channel.QueueDeclareAsync("text_queue", true, false, false);
