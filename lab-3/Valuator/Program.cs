@@ -1,5 +1,6 @@
 using RabbitMQ.Client;
 using StackExchange.Redis;
+using Valuator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,10 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 var factory = new ConnectionFactory { HostName = "rabbitmq" };
 var rabbitMqConnection = await factory.CreateConnectionAsync();
 builder.Services.AddSingleton(rabbitMqConnection);
+
+builder.Services.AddSingleton<IRedisService, RedisService>();
+builder.Services.AddSingleton<IMessageQueueService, MessageQueueService>();
+
 
 var app = builder.Build();
 
