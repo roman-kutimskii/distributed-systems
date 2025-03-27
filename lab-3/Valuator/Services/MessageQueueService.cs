@@ -10,7 +10,6 @@ public interface IMessageQueueService
 
 public class MessageQueueService(IConnection rabbitMqConnection) : IMessageQueueService
 {
-    // TODO: Добавить ожидание окончания операции
     public async Task PublishMessageAsync(string queueName, string message)
     {
         await using var channel = await rabbitMqConnection.CreateChannelAsync();
