@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using RabbitMQ.Client;
-using StackExchange.Redis;
+using Valuator.Services;
 
 namespace Valuator.Pages;
 

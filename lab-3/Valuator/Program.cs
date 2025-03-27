@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.DataProtection;
 using RabbitMQ.Client;
 using StackExchange.Redis;
-using Valuator;
+using Valuator.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,9 @@ builder.Services.AddRazorPages();
 
 var redis = ConnectionMultiplexer.Connect("redis:6379");
 builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
+
+builder.Services.AddDataProtection().PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys")
+    .SetApplicationName("Valuator");
 
 var factory = new ConnectionFactory { HostName = "rabbitmq" };
 var rabbitMqConnection = await factory.CreateConnectionAsync();

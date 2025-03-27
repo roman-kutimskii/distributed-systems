@@ -1,11 +1,11 @@
 ﻿services:
   valuator:
     image: valuator
+    deploy:
+      replicas: 2
     build:
       context: .
       dockerfile: Valuator/Dockerfile
-    ports:
-      - "8080:8080"
     depends_on:
       redis:
         condition: service_healthy
@@ -46,6 +46,17 @@
       interval: 10s
       timeout: 5s
       retries: 5
+  
+  nginx:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - valuator
+      - rankcalculator
 
 volumes:
   redis-data:

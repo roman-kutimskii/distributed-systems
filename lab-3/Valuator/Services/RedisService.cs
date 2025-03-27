@@ -1,6 +1,6 @@
 ﻿using StackExchange.Redis;
 
-namespace Valuator;
+namespace Valuator.Services;
 
 public interface IRedisService
 {
