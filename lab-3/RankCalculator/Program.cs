@@ -18,30 +18,21 @@ class Program
 
         await channel.QueueDeclareAsync("text_queue", true, false, false);
 
-        Console.WriteLine(" [*] Waiting for messages. To exit press CTRL+C");
-
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.ReceivedAsync += async (_, eventArgs) =>
         {
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
 
-            Console.WriteLine($" [x] Received message: {message}");
-
             var text = await db.StringGetAsync("TEXT-" + message);
             var textStr = text.ToString();
-
-            Console.WriteLine($" [x] Processing text: {textStr}");
 
             var rank = CalculateRank(textStr);
 
             await db.StringSetAsync("RANK-" + message, rank);
-
-            Console.WriteLine($" [x] Rank calculated and saved: {rank}");
         };
 
         await channel.BasicConsumeAsync("text_queue", true, consumer);
 
-        Console.WriteLine(" [*] RankCalculator is running. Press CTRL+C to exit.");
         await Task.Delay(Timeout.Infinite);
     }
 
