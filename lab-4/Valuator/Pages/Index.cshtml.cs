@@ -14,10 +14,10 @@ public class IndexModel(IRedisService redisService, IMessageQueueService message
     {
         var id = Guid.NewGuid().ToString();
 
-        redisService.SaveText(id, text);
+        await redisService.SaveText(id, text);
 
         var similarity = redisService.CalculateSimilarity(id, text);
-        redisService.SaveSimilarity(id, similarity);
+        await redisService.SaveSimilarity(id, similarity);
 
         await messageQueueService.PublishSimilarityCalculatedEventAsync(id, similarity);
 
