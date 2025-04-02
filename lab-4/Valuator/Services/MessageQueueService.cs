@@ -15,19 +15,23 @@ public class MessageQueueService(IConnection rabbitMqConnection) : IMessageQueue
     public async Task PublishMessageAsync(string queueName, string message)
     {
         await using var channel = await rabbitMqConnection.CreateChannelAsync();
-        await channel.QueueDeclareAsync(queueName, durable: true, exclusive: false, autoDelete: false);
+        await channel.QueueDeclareAsync(queueName, true, false, false);
 
         var body = Encoding.UTF8.GetBytes(message);
-        await channel.BasicPublishAsync("", routingKey: queueName, body);
+        await channel.BasicPublishAsync("", queueName, body);
 
         await Task.CompletedTask;
     }
 
-    public Task PublishSimilarityCalculatedEventAsync(string textId, double similarity)
+    public async Task PublishSimilarityCalculatedEventAsync(string textId, double similarity)
     {
+        await using var channel = await rabbitMqConnection.CreateChannelAsync();
+        await channel.ExchangeDeclareAsync("events_exchange", ExchangeType.Fanout, true);
+
         var eventData = new { EventType = "SimilarityCalculated", TextId = textId, Similarity = similarity };
         var eventJson = JsonSerializer.Serialize(eventData);
+        var body = Encoding.UTF8.GetBytes(eventJson);
 
-        return PublishMessageAsync("events_queue", eventJson);
+        await channel.BasicPublishAsync("events_exchange", "", body);
     }
 }

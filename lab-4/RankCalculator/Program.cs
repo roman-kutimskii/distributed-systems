@@ -6,9 +6,9 @@ using StackExchange.Redis;
 
 namespace RankCalculator;
 
-class Program
+internal class Program
 {
-    static async Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var redis = await ConnectionMultiplexer.ConnectAsync("redis:6379");
         var db = redis.GetDatabase();
@@ -18,7 +18,8 @@ class Program
         var channel = await connection.CreateChannelAsync();
 
         await channel.QueueDeclareAsync("text_queue", true, false, false);
-        await channel.QueueDeclareAsync("events_queue", true, false, false);
+
+        await channel.ExchangeDeclareAsync("events_exchange", ExchangeType.Fanout, true);
 
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.ReceivedAsync += async (_, eventArgs) =>
@@ -36,7 +37,10 @@ class Program
             var eventJson = JsonSerializer.Serialize(eventData);
             var eventBody = Encoding.UTF8.GetBytes(eventJson);
 
-            await channel.BasicPublishAsync("", routingKey: "events_queue", eventBody);
+            await channel.BasicPublishAsync(
+                "events_exchange",
+                "",
+                eventBody);
         };
 
         await channel.BasicConsumeAsync("text_queue", true, consumer);
@@ -44,19 +48,13 @@ class Program
         await Task.Delay(Timeout.Infinite);
     }
 
-    static double CalculateRank(string text)
+    private static double CalculateRank(string text)
     {
-        if (String.IsNullOrEmpty(text))
-        {
-            return 0;
-        }
+        if (string.IsNullOrEmpty(text)) return 0;
 
         double count = 0;
 
-        foreach (var character in text)
-        {
-            count += Char.IsLetter(char.ToLower(character)) ? 1 : 0;
-        }
+        foreach (var character in text) count += char.IsLetter(char.ToLower(character)) ? 1 : 0;
 
         return 1 - count / text.Length;
     }
