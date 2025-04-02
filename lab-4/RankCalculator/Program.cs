@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using StackExchange.Redis;
@@ -14,9 +15,10 @@ class Program
 
         var factory = new ConnectionFactory { HostName = "rabbitmq" };
         await using var connection = await factory.CreateConnectionAsync();
-        await using var channel = await connection.CreateChannelAsync();
+        var channel = await connection.CreateChannelAsync();
 
         await channel.QueueDeclareAsync("text_queue", true, false, false);
+        await channel.QueueDeclareAsync("events_queue", true, false, false);
 
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.ReceivedAsync += async (_, eventArgs) =>
@@ -29,6 +31,12 @@ class Program
             var rank = CalculateRank(textStr);
 
             await db.StringSetAsync("RANK-" + message, rank);
+
+            var eventData = new { EventType = "RankCalculated", TextId = message, Rank = rank };
+            var eventJson = JsonSerializer.Serialize(eventData);
+            var eventBody = Encoding.UTF8.GetBytes(eventJson);
+
+            await channel.BasicPublishAsync("", routingKey: "events_queue", eventBody);
         };
 
         await channel.BasicConsumeAsync("text_queue", true, consumer);
