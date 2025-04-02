@@ -4,8 +4,8 @@ namespace Valuator.Services;
 
 public interface IRedisService
 {
-    void SaveText(string id, string text);
-    void SaveSimilarity(string id, double similarity);
+    Task SaveText(string id, string text);
+    Task SaveSimilarity(string id, double similarity);
     double CalculateSimilarity(string id, string text);
 }
 
@@ -13,14 +13,14 @@ public class RedisService(IConnectionMultiplexer redis) : IRedisService
 {
     private readonly IDatabase _redisDb = redis.GetDatabase();
 
-    public void SaveText(string id, string text)
+    public Task SaveText(string id, string text)
     {
-        _redisDb.StringSet("TEXT-" + id, text);
+        return _redisDb.StringSetAsync("TEXT-" + id, text);
     }
 
-    public void SaveSimilarity(string id, double similarity)
+    public Task SaveSimilarity(string id, double similarity)
     {
-        _redisDb.StringSet("SIMILARITY-" + id, similarity);
+        return _redisDb.StringSetAsync("SIMILARITY-" + id, similarity);
     }
 
     public double CalculateSimilarity(string id, string text)
