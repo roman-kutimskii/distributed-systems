@@ -19,6 +19,8 @@ public class IndexModel(IRedisService redisService, IMessageQueueService message
         var similarity = redisService.CalculateSimilarity(id, text);
         redisService.SaveSimilarity(id, similarity);
 
+        await messageQueueService.PublishSimilarityCalculatedEventAsync(id, similarity);
+
         await messageQueueService.PublishMessageAsync("text_queue", id);
 
         return RedirectToPage("/Summary", new { id });
