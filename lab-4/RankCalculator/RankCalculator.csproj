@@ -9,14 +9,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="NRedisStack" Version="0.13.2" />
-      <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
+        <PackageReference Include="NRedisStack" Version="0.13.2"/>
+        <PackageReference Include="RabbitMQ.Client" Version="7.1.2"/>
     </ItemGroup>
 
 </Project>

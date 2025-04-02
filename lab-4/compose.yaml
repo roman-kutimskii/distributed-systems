@@ -24,7 +24,7 @@
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-        
+  
   eventslogger:
     image: eventslogger
     deploy:
