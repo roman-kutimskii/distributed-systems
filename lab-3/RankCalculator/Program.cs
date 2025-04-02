@@ -5,9 +5,9 @@ using StackExchange.Redis;
 
 namespace RankCalculator;
 
-class Program
+internal class Program
 {
-    static async Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var redis = await ConnectionMultiplexer.ConnectAsync("redis:6379");
         var db = redis.GetDatabase();
@@ -36,19 +36,13 @@ class Program
         await Task.Delay(Timeout.Infinite);
     }
 
-    static double CalculateRank(string text)
+    private static double CalculateRank(string text)
     {
-        if (String.IsNullOrEmpty(text))
-        {
-            return 0;
-        }
+        if (string.IsNullOrEmpty(text)) return 0;
 
         double count = 0;
 
-        foreach (var character in text)
-        {
-            count += Char.IsLetter(char.ToLower(character)) ? 1 : 0;
-        }
+        foreach (var character in text) count += char.IsLetter(char.ToLower(character)) ? 1 : 0;
 
         return 1 - count / text.Length;
     }

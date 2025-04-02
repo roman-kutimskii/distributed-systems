@@ -15,10 +15,10 @@ public class SummaryModel(IConnectionMultiplexer redis) : PageModel
     {
         TryGetData(id);
     }
-    
+
     public JsonResult OnGetCheckData(string id)
     {
-        bool isDataAvailable = TryGetData(id);
+        var isDataAvailable = TryGetData(id);
 
         return new JsonResult(new
         {
@@ -30,8 +30,8 @@ public class SummaryModel(IConnectionMultiplexer redis) : PageModel
 
     private bool TryGetData(string id)
     {
-        bool hasRank = false;
-        bool hasSimilarity = false;
+        var hasRank = false;
+        var hasSimilarity = false;
 
         var rankValue = _redisDb.StringGet("RANK-" + id);
         if (rankValue.HasValue && double.TryParse(rankValue, out var rank))

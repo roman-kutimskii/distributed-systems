@@ -30,10 +30,7 @@ public class RedisService(IConnectionMultiplexer redis) : IRedisService
         foreach (var key in keys)
         {
             var storedText = _redisDb.StringGet(key);
-            if (storedText == text && key != "TEXT-" + id)
-            {
-                return 1;
-            }
+            if (storedText == text && key != "TEXT-" + id) return 1;
         }
 
         return 0;
