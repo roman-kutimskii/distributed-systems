@@ -1,0 +1,52 @@
+﻿@page
+@model SummaryModel
+@{
+    ViewData["Title"] = "Результаты оценки";
+}
+
+<div id="loading" class="text-center">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Загрузка...</span>
+    </div>
+    <p>Пожалуйста, подождите. Производится расчет...</p>
+</div>
+
+<div id="results" style="display: none;">
+    <p>Оценка содержания: <span id="rank-value">@Model.Rank</span></p>
+    <p>Плагиат: <span id="similarity-value">@Model.Similarity</span></p>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            if (!id) {
+                document.getElementById('loading').innerHTML = '<p class="text-danger">Ошибка: ID не найден.</p>';
+                return;
+            }
+
+            function checkDataAvailability() {
+                fetch(`/Summary?handler=CheckData&id=${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.isAvailable) {
+                            document.getElementById('rank-value').textContent = data.rank;
+                            document.getElementById('similarity-value').textContent = data.similarity;
+                            document.getElementById('loading').style.display = 'none';
+                            document.getElementById('results').style.display = 'block';
+                        } else {
+                            setTimeout(checkDataAvailability, 500);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking data:', error);
+                        setTimeout(checkDataAvailability, 1000);
+                    });
+            }
+
+            checkDataAvailability();
+        });
+    </script>
+}
