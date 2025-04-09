@@ -29,6 +29,10 @@ internal class Program
             var text = await db.StringGetAsync("TEXT-" + message);
             var textStr = text.ToString();
 
+            var random = new Random();
+            var delaySeconds = random.Next(3, 16);
+            await Task.Delay(delaySeconds * 1000);
+
             var rank = CalculateRank(textStr);
 
             await db.StringSetAsync("RANK-" + message, rank);
