@@ -11,6 +11,8 @@
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+      centrifugo:
+        condition: service_started
 
   rankcalculator:
     image: rankcalculator
@@ -58,6 +60,14 @@
       timeout: 5s
       retries: 5
   
+  centrifugo:
+    image: centrifugo/centrifugo
+    volumes:
+      - ./centrifugo/config.json:/centrifugo/config.json
+    command: centrifugo -c config.json
+    ports:
+      - "8000:8000"
+    
   nginx:
     image: nginx
     ports:

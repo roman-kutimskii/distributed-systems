@@ -3,6 +3,7 @@ using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using StackExchange.Redis;
+using Microsoft.Extensions.Logging;
 
 namespace RankCalculator;
 
@@ -12,6 +13,8 @@ internal class Program
     {
         var redis = await ConnectionMultiplexer.ConnectAsync("redis:6379");
         var db = redis.GetDatabase();
+        
+        var centrifugoService = new CentrifugoService();
 
         var factory = new ConnectionFactory { HostName = "rabbitmq" };
         await using var connection = await factory.CreateConnectionAsync();
@@ -30,13 +33,17 @@ internal class Program
             var textStr = text.ToString();
 
             var random = new Random();
-            var delaySeconds = random.Next(3, 16);
-            await Task.Delay(delaySeconds * 1000);
+            var delaySeconds = random.Next(3, 15);
+            await Task.Delay(delaySeconds * 100);
 
             var rank = CalculateRank(textStr);
 
             await db.StringSetAsync("RANK-" + message, rank);
 
+            // Publish to Centrifugo
+            await centrifugoService.PublishAsync($"text:{message}", new { EventType = "RankCalculated", TextId = message, Rank = rank });
+
+            // Also publish to RabbitMQ for other services
             var eventData = new { EventType = "RankCalculated", TextId = message, Rank = rank };
             var eventJson = JsonSerializer.Serialize(eventData);
             var eventBody = Encoding.UTF8.GetBytes(eventJson);

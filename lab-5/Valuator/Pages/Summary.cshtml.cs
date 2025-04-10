@@ -8,8 +8,8 @@ public class SummaryModel(IConnectionMultiplexer redis) : PageModel
 {
     private readonly IDatabase _redisDb = redis.GetDatabase();
 
-    public double Rank { get; private set; }
-    public double Similarity { get; private set; }
+    public double? Rank { get; private set; }
+    public double? Similarity { get; private set; }
 
     public void OnGet(string id)
     {

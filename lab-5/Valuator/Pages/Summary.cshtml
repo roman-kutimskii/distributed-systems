@@ -4,49 +4,130 @@
     ViewData["Title"] = "Результаты оценки";
 }
 
-<div id="loading" class="text-center">
-    <div class="spinner-border" role="status">
-        <span class="visually-hidden">Загрузка...</span>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">Оценка содержания</div>
+            <div class="card-body">
+                <div id="rank-loading" class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Загрузка...</span>
+                    </div>
+                    <p>Вычисление оценки...</p>
+                </div>
+                <div id="rank-results" style="display: none;">
+                    <p>Оценка содержания: <span id="rank-value">@Model.Rank</span></p>
+                </div>
+            </div>
+        </div>
     </div>
-    <p>Пожалуйста, подождите. Производится расчет...</p>
-</div>
-
-<div id="results" style="display: none;">
-    <p>Оценка содержания: <span id="rank-value">@Model.Rank</span></p>
-    <p>Плагиат: <span id="similarity-value">@Model.Similarity</span></p>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">Оценка плагиата</div>
+            <div class="card-body">
+                <div id="similarity-loading" class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Загрузка...</span>
+                    </div>
+                    <p>Поиск плагиата...</p>
+                </div>
+                <div id="similarity-results" style="display: none;">
+                    <p>Плагиат: <span id="similarity-value">@Model.Similarity</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
+    <script src="https://unpkg.com/centrifuge@5.3.4/dist/centrifuge.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
 
             if (!id) {
-                document.getElementById('loading').innerHTML = '<p class="text-danger">Ошибка: ID не найден.</p>';
+                document.getElementById('rank-loading').innerHTML = '<p class="text-danger">Ошибка: ID не найден.</p>';
+                document.getElementById('similarity-loading').innerHTML = '<p class="text-danger">Ошибка: ID не найден.</p>';
                 return;
             }
+
+            // Initial check if data is already available
+            checkDataAvailability();
+
+            // Set up Centrifugo connection to get real-time updates
+            const centrifuge = new Centrifuge("ws://localhost:8000/connection/websocket");
+            
+            // Enhanced logging for Centrifugo connection events
+            centrifuge.on('connecting', function (ctx) {
+                console.log(`Connecting to Centrifugo: ${ctx.code}, ${ctx.reason}`);
+                document.getElementById('similarity-loading').innerHTML += '<p>Connecting to real-time updates...</p>';
+            }).on('connected', function (ctx) {
+                console.log(`Connected to Centrifugo over ${ctx.transport}`);
+                document.getElementById('similarity-loading').innerHTML += '<p class="text-success">Connected to real-time updates</p>';
+            }).on('disconnected', function (ctx) {
+                console.error(`Disconnected from Centrifugo: ${ctx.code}, ${ctx.reason}`);
+                document.getElementById('similarity-loading').innerHTML += `<p class="text-warning">Disconnected from real-time updates: ${ctx.reason}</p>`;
+            }).on('error', function(ctx) {
+                console.error('Centrifugo connection error:', ctx);
+                document.getElementById('similarity-loading').innerHTML += `<p class="text-danger">Connection error: ${ctx.error}</p>`;
+            });
+
+            // Subscribe to the channel for this specific text ID with error handling
+            const subscription = centrifuge.newSubscription(`text:${id}`);
+            
+            subscription.on('subscribing', function(ctx) {
+                console.log(`Subscribing to channel text:${id}`, ctx);
+            }).on('subscribed', function(ctx) {
+                console.log(`Subscribed to channel text:${id}`, ctx);
+            }).on('error', function(ctx) {
+                console.error(`Subscription error for channel text:${id}:`, ctx);
+                document.getElementById('similarity-loading').innerHTML += `<p class="text-danger">Subscription error: ${ctx.error}</p>`;
+            });
+            
+            subscription.on('publication', function(ctx) {
+                console.log('Received event:', ctx.data);
+                
+                const eventData = ctx.data;
+                if (eventData.EventType === "RankCalculated") {
+                    document.getElementById('rank-value').textContent = eventData.Rank;
+                    document.getElementById('rank-loading').style.display = 'none';
+                    document.getElementById('rank-results').style.display = 'block';
+                } else if (eventData.EventType === "SimilarityCalculated") {
+                    document.getElementById('similarity-value').textContent = eventData.Similarity;
+                    document.getElementById('similarity-loading').style.display = 'none';
+                    document.getElementById('similarity-results').style.display = 'block';
+                }
+            });
+            
+            // Connect to Centrifugo
+            subscription.subscribe();
+            centrifuge.connect();
 
             function checkDataAvailability() {
                 fetch(`/Summary?handler=CheckData&id=${id}`)
                     .then(response => response.json())
                     .then(data => {
-                        if (data.isAvailable) {
+                        console.log('assadf')
+                        
+                        // Check if rank is available
+                        if (data.rank !== null) {
                             document.getElementById('rank-value').textContent = data.rank;
+                            document.getElementById('rank-loading').style.display = 'none';
+                            document.getElementById('rank-results').style.display = 'block';
+                        }
+                        
+                        // Check if similarity is available
+                        if (data.similarity !== null) {
                             document.getElementById('similarity-value').textContent = data.similarity;
-                            document.getElementById('loading').style.display = 'none';
-                            document.getElementById('results').style.display = 'block';
-                        } else {
-                            setTimeout(checkDataAvailability, 500);
+                            document.getElementById('similarity-loading').style.display = 'none';
+                            document.getElementById('similarity-results').style.display = 'block';
                         }
                     })
                     .catch(error => {
                         console.error('Error checking data:', error);
-                        setTimeout(checkDataAvailability, 1000);
                     });
             }
-
-            checkDataAvailability();
         });
     </script>
 }

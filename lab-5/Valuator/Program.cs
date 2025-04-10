@@ -20,7 +20,7 @@ builder.Services.AddSingleton(rabbitMqConnection);
 
 builder.Services.AddSingleton<IRedisService, RedisService>();
 builder.Services.AddSingleton<IMessageQueueService, MessageQueueService>();
-
+builder.Services.AddSingleton<ICentrifugoService, CentrifugoService>();
 
 var app = builder.Build();
 
