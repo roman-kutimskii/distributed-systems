@@ -1,0 +1,13 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<div>
+    <form method="post" class="d-flex flex-column align-items-start gap-1">
+        <div>Текст для оценки:</div>
+        <textarea required name="text" rows="5" cols="50"></textarea>
+        <input type="submit"/>
+    </form>
+</div>
