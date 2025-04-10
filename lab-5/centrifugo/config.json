@@ -1,0 +1,14 @@
+{
+  "client": {
+    "allow_anonymous_connect_without_token": true,
+    "allowed_origins": ["*"]
+  },
+  "http_api": {
+    "key": "my_api_key"
+  },
+  "admin": {
+    "password": "password",
+    "secret": "secret",
+    "enabled": true
+  }
+}

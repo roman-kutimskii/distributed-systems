@@ -1,0 +1,60 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  eventslogger:
+    build:
+      context: "D:\\RiderProjects\\distributed-systems\\lab-4"
+      dockerfile: "EventsLogger/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/EventsLogger.dll"
+    environment:
+      DOTNET_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "eventslogger:dev"
+    ports: []
+    volumes:
+    - "D:\\RiderProjects\\distributed-systems\\lab-4\\EventsLogger:/app:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-4:/src:rw"
+    - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
+  rankcalculator:
+    build:
+      context: "D:\\RiderProjects\\distributed-systems\\lab-4"
+      dockerfile: "RankCalculator/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/RankCalculator.dll"
+    environment:
+      DOTNET_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "rankcalculator:dev"
+    ports: []
+    volumes:
+    - "D:\\RiderProjects\\distributed-systems\\lab-4\\RankCalculator:/app:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-4:/src:rw"
+    - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
+  valuator:
+    build:
+      context: "D:\\RiderProjects\\distributed-systems\\lab-4"
+      dockerfile: "Valuator/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Valuator.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net8.0/Valuator.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "valuator:dev"
+    ports: []
+    volumes:
+    - "D:\\RiderProjects\\distributed-systems\\lab-4\\Valuator:/app:rw"
+    - "D:\\RiderProjects\\distributed-systems\\lab-4:/src:rw"
+    - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
