@@ -13,9 +13,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ec34e457-41de-44c6-ab9f-8c8c3742619d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/centrifugo/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.lab-4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.lab-4/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.lab-5/Docker/compose.generated.override.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.lab-5/Docker/compose.generated.override.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Valuator/Valuator.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Valuator.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/centrifugo/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/centrifugo/config.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +43,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Docker.compose.yaml.centrifugo: Compose Deployment.executor": "Run",
+    "Docker.compose.yaml.nginx: Compose Deployment.executor": "Run",
+    "Docker.compose.yaml.valuator: Compose Deployment.executor": "Run",
     "Docker.compose.yaml: Compose Deployment.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -53,7 +58,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Docker.compose.yaml.centrifugo: Compose Deployment">
+  <component name="RunManager" selected="Docker.compose.yaml.nginx: Compose Deployment">
     <configuration name="EventsLogger" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -139,7 +144,7 @@
       <deployment type="dockerfile">
         <settings>
           <option name="containerName" value="eventslogger" />
-          <option name="contextFolderPath" value="D:\RiderProjects\distributed-systems\lab-5" />
+          <option name="contextFolderPath" value="." />
           <option name="sourceFilePath" value="EventsLogger/Dockerfile" />
         </settings>
       </deployment>
@@ -150,7 +155,7 @@
       <deployment type="dockerfile">
         <settings>
           <option name="containerName" value="rankcalculator" />
-          <option name="contextFolderPath" value="D:\RiderProjects\distributed-systems\lab-5" />
+          <option name="contextFolderPath" value="." />
           <option name="sourceFilePath" value="RankCalculator/Dockerfile" />
         </settings>
       </deployment>
@@ -161,7 +166,7 @@
       <deployment type="dockerfile">
         <settings>
           <option name="containerName" value="valuator" />
-          <option name="contextFolderPath" value="D:\RiderProjects\distributed-systems\lab-5" />
+          <option name="contextFolderPath" value="." />
           <option name="sourceFilePath" value="Valuator/Dockerfile" />
         </settings>
       </deployment>
@@ -176,21 +181,12 @@
       <deployment type="dockerfile" />
       <method v="2" />
     </configuration>
-    <configuration name="compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="sourceFilePath" value="compose.yaml" />
-        </settings>
-      </deployment>
-      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
-      <method v="2" />
-    </configuration>
-    <configuration name="compose.yaml.centrifugo: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+    <configuration name="compose.yaml.nginx: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
             <list>
-              <option value="centrifugo" />
+              <option value="nginx" />
             </list>
           </option>
           <option name="sourceFilePath" value="compose.yaml" />
@@ -199,10 +195,36 @@
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
       <method v="2" />
     </configuration>
+    <configuration name="compose.yaml.valuator: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="valuator" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="compose.yaml" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue=".NET Launch Settings Profile.Valuator: http" />
+      <item itemvalue=".NET Launch Settings Profile.Valuator: https" />
+      <item itemvalue=".NET Launch Settings Profile.Valuator: IIS Express" />
+      <item itemvalue=".NET Project.EventsLogger" />
+      <item itemvalue=".NET Project.RankCalculator" />
+      <item itemvalue="Docker.EventsLogger/Dockerfile" />
+      <item itemvalue="Docker.RankCalculator/Dockerfile" />
+      <item itemvalue="Docker.Valuator/Dockerfile" />
+      <item itemvalue="Docker.compose.yaml.nginx: Compose Deployment" />
+      <item itemvalue="Docker.compose.yaml.valuator: Compose Deployment" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.compose.yaml.centrifugo: Compose Deployment" />
-        <item itemvalue="Docker.compose.yaml: Compose Deployment" />
+        <item itemvalue="Docker.compose.yaml.nginx: Compose Deployment" />
+        <item itemvalue="Docker.compose.yaml.valuator: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -214,7 +236,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1744534715041</updated>
-      <workItem from="1744534716772" duration="881000" />
+      <workItem from="1744534716772" duration="7743000" />
     </task>
     <servers />
   </component>

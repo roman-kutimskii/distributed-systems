@@ -1,7 +1,15 @@
 ﻿@page
+@using System.Security.Claims
 @model SummaryModel
 @{
     ViewData["Title"] = "Результаты оценки";
+
+    var id = Request.Query["id"].ToString();
+
+    var channel = "text:" + id;
+
+    var token = Model.GenerateJwtToken();
+    var subToken = Model.GenerateJwtToken([new Claim("channel", channel)]);
 }
 
 <div id="loading" class="text-center">
@@ -17,6 +25,31 @@
 </div>
 
 @section Scripts {
+    <script src="https://unpkg.com/centrifuge@5.3.4/dist/centrifuge.js"></script>
+    <script>
+        const container = document.getElementById('counter');
+        const centrifuge = new Centrifuge("ws://localhost:8000/connection/websocket", {token: "@token"});
+
+        centrifuge.on("connecting", function (ctx) {
+            console.log(`connecting: ${ctx.code}, ${ctx.reason}`);
+        }).on("connected", function (ctx) {
+            console.log(`connected over ${ctx.transport}`);
+        }).on("disconnected", function (ctx) {
+            console.log(`disconnected: ${ctx.code}, ${ctx.reason}`);
+        }).connect();
+
+        const sub = centrifuge.newSubscription("@channel", {token: "@subToken"});
+
+        sub.on("publication", function (ctx) {
+            container.innerHTML = ctx.data.value;
+        }).on("subscribing", function (ctx) {
+            console.log(`subscribing: ${ctx.code}, ${ctx.reason}`);
+        }).on("subscribed", function (ctx) {
+            console.log("subscribed", ctx);
+        }).on("unsubscribed", function (ctx) {
+            console.log(`unsubscribed: ${ctx.code}, ${ctx.reason}`);
+        }).subscribe();
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);

@@ -1,24 +1,5 @@
 # This is a generated file. Not intended for manual editing.
 services:
-  eventslogger:
-    build:
-      context: "D:\\RiderProjects\\distributed-systems\\lab-5"
-      dockerfile: "EventsLogger/Dockerfile"
-      target: "base"
-    command: []
-    entrypoint:
-    - "dotnet"
-    - "/app/bin/Debug/net8.0/EventsLogger.dll"
-    environment:
-      DOTNET_ENVIRONMENT: "Development"
-      DOTNET_USE_POLLING_FILE_WATCHER: "true"
-    image: "eventslogger:dev"
-    ports: []
-    volumes:
-    - "D:\\RiderProjects\\distributed-systems\\lab-5\\EventsLogger:/app:rw"
-    - "D:\\RiderProjects\\distributed-systems\\lab-5:/src:rw"
-    - "C:\\Users\\roman\\.nuget\\packages:/home/app/.nuget/packages"
-    working_dir: "/app"
   rankcalculator:
     build:
       context: "D:\\RiderProjects\\distributed-systems\\lab-5"
