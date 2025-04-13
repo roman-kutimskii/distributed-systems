@@ -50,29 +50,6 @@
 @section Scripts {
     <script src="https://unpkg.com/centrifuge@5.3.4/dist/centrifuge.js"></script>
     <script>
-        const centrifuge = new Centrifuge("ws://localhost:8000/connection/websocket", {token: "@token"});
-
-        centrifuge.on("connecting", function (ctx) {
-            console.log(`connecting: ${ctx.code}, ${ctx.reason}`);
-        }).on("connected", function (ctx) {
-            console.log(`connected over ${ctx.transport}`);
-        }).on("disconnected", function (ctx) {
-            console.log(`disconnected: ${ctx.code}, ${ctx.reason}`);
-        }).connect();
-
-        const sub = centrifuge.newSubscription("@channel", {token: "@subToken"});
-
-        sub.on("publication", function (ctx) {
-            container.innerHTML = ctx.data.value;
-        }).on("subscribing", function (ctx) {
-            console.log(`subscribing: ${ctx.code}, ${ctx.reason}`);
-        }).on("subscribed", function (ctx) {
-            console.log("subscribed", ctx);
-        }).on("unsubscribed", function (ctx) {
-            console.log(`unsubscribed: ${ctx.code}, ${ctx.reason}`);
-        }).subscribe();
-    </script>
-    <script>
         document.addEventListener("DOMContentLoaded", function () {
             if (!"@id") {
                 document.getElementById("rank-loading").innerHTML = '<p class="text-danger">Ошибка: ID не найден.</p>';
@@ -95,7 +72,7 @@
             const sub = centrifuge.newSubscription("@channel", {token: "@subToken"});
 
             sub.on("publication", function (ctx) {
-                document.getElementById('rank-value').textContent = ctx.data.rank;
+                document.getElementById('rank-value').textContent = ctx.data;
                 document.getElementById('rank-loading').style.display = 'none';
                 document.getElementById('rank-results').style.display = 'block';
             }).on("subscribing", function (ctx) {

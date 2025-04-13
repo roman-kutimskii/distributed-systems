@@ -12,10 +12,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ec34e457-41de-44c6-ab9f-8c8c3742619d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.lab-4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.lab-4/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RankCalculator/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RankCalculator/Program.cs" afterDir="false" />
-    </list>
+    <list default="true" id="ec34e457-41de-44c6-ab9f-8c8c3742619d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -232,7 +229,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1744534715041</updated>
-      <workItem from="1744534716772" duration="9118000" />
+      <workItem from="1744534716772" duration="9192000" />
     </task>
     <servers />
   </component>

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -12,6 +13,8 @@ internal class Program
     {
         var redis = await ConnectionMultiplexer.ConnectAsync("redis:6379");
         var db = redis.GetDatabase();
+
+        var centrifugoService = new CentrifugoService();
 
         var factory = new ConnectionFactory { HostName = "rabbitmq" };
         await using var connection = await factory.CreateConnectionAsync();
@@ -28,12 +31,14 @@ internal class Program
 
             var text = await db.StringGetAsync("TEXT-" + message);
             var textStr = text.ToString();
-            
+
             await Task.Delay(new Random().Next(3, 15) * 1000);
-            
+
             var rank = CalculateRank(textStr);
 
             await db.StringSetAsync("RANK-" + message, rank);
+
+            await centrifugoService.PublishAsync($"text:{message}", rank.ToString(CultureInfo.InvariantCulture));
 
             var eventData = new { EventType = "RankCalculated", TextId = message, Rank = rank };
             var eventJson = JsonSerializer.Serialize(eventData);
