@@ -11,6 +11,8 @@
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+      centrifugo:
+        condition: service_started
 
   rankcalculator:
     image: rankcalculator
@@ -24,6 +26,8 @@
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+      centrifugo:
+        condition: service_started
   
   eventslogger:
     image: eventslogger
@@ -68,6 +72,14 @@
     depends_on:
       - valuator
       - rankcalculator
+  
+  centrifugo:
+    image: centrifugo/centrifugo
+    volumes:
+      - ./centrifugo/config.json:/centrifugo/config.json
+    command: centrifugo -c config.json
+    ports:
+      - "8000:8000"
 
 volumes:
   redis-data:
