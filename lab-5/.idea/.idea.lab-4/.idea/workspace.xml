@@ -14,11 +14,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ec34e457-41de-44c6-ab9f-8c8c3742619d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.lab-4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.lab-4/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.lab-5/Docker/compose.generated.override.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.lab-5/Docker/compose.generated.override.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Valuator/Valuator.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Valuator.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/centrifugo/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/centrifugo/config.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -236,7 +233,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1744534715041</updated>
-      <workItem from="1744534716772" duration="7743000" />
+      <workItem from="1744534716772" duration="9014000" />
     </task>
     <servers />
   </component>
