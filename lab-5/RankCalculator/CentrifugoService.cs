@@ -44,7 +44,7 @@ public class CentrifugoService
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message, "Error publishing to Centrifugo channel", channel);
+            Console.WriteLine($"Error publishing to Centrifugo channel on {channel}: {ex.Message}");
             throw;
         }
     }
