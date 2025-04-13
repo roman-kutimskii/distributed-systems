@@ -17,7 +17,7 @@ public class CentrifugoService
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message, "Error initializing CentrifugoService");
+            Console.WriteLine($"Error initializing CentrifugoService: {ex.Message}");
             throw;
         }
     }
