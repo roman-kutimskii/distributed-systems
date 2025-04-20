@@ -10,9 +10,11 @@ public class IndexModel(IRedisService redisService, IMessageQueueService message
     {
     }
 
-    public async Task<IActionResult> OnPost(string text, string region)
+    public async Task<IActionResult> OnPost(string text, string country)
     {
         var id = Guid.NewGuid().ToString();
+
+        var region = GetRegionByCountry(country);
 
         await redisService.SaveText(id, text, region);
 
@@ -24,5 +26,18 @@ public class IndexModel(IRedisService redisService, IMessageQueueService message
         await messageQueueService.PublishMessageAsync("text_queue", id);
 
         return RedirectToPage("/Summary", new { id });
+    }
+
+    private string GetRegionByCountry(string country)
+    {
+        return country switch
+        {
+            "Russia" => "RU",
+            "France" => "EU",
+            "Germany" => "EU",
+            "UAE" => "ASIA",
+            "India" => "ASIA",
+            _ => throw new ArgumentException($"Unknown country: {country}")
+        };
     }
 }

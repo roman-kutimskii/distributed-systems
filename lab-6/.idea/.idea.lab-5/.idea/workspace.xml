@@ -14,7 +14,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1741a882-40d6-4af3-83c7-ecaaf2098fe6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.lab-5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.lab-5/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +26,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock://D:/RiderProjects/distributed-systems/lab-6/Valuator/Pages/Index.cshtml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/distributed-systems/lab-6/Valuator/Pages/Index.cshtml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/distributed-systems/lab-6/Valuator/Pages/Index.cshtml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/distributed-systems/lab-6/Valuator/Pages/Index.cshtml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/distributed-systems/lab-6/Valuator/Pages/Index.cshtml.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Valuator/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css.map" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Valuator/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js.map" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -217,7 +223,7 @@
       <workItem from="1744821882007" duration="666000" />
       <workItem from="1744867021590" duration="2892000" />
       <workItem from="1745145340786" duration="97000" />
-      <workItem from="1745145441697" duration="7898000" />
+      <workItem from="1745145441697" duration="8393000" />
     </task>
     <task id="LOCAL-00001" summary="Обновить схему">
       <option name="closed" value="true" />
