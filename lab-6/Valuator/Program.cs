@@ -8,9 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-var redis = ConnectionMultiplexer.Connect("redis:6379");
-builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
-
+var redis = ConnectionMultiplexer.Connect(builder.Configuration["DB_MAIN"]!);
 builder.Services.AddDataProtection().PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys")
     .SetApplicationName("Valuator");
 
@@ -20,7 +18,6 @@ builder.Services.AddSingleton(rabbitMqConnection);
 
 builder.Services.AddSingleton<IRedisService, RedisService>();
 builder.Services.AddSingleton<IMessageQueueService, MessageQueueService>();
-
 
 var app = builder.Build();
 

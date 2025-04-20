@@ -71,7 +71,7 @@
       interval: 10s
       timeout: 5s
       retries: 5
-      
+  
   redis-ru:
     image: redis
     volumes:
@@ -81,7 +81,7 @@
       interval: 10s
       timeout: 5s
       retries: 5
-      
+  
   redis-eu:
     image: redis
     volumes:
@@ -91,7 +91,7 @@
       interval: 10s
       timeout: 5s
       retries: 5
-      
+  
   redis-asia:
     image: redis
     volumes:

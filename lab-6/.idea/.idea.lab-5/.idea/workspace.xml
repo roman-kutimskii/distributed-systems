@@ -13,6 +13,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1741a882-40d6-4af3-83c7-ecaaf2098fe6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.lab-5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.lab-5/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RankCalculator/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RankCalculator/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml.cs" afterDir="false" />
@@ -52,7 +53,7 @@
     &quot;Docker.compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;pa-6&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -217,7 +218,7 @@
       <workItem from="1744821882007" duration="666000" />
       <workItem from="1744867021590" duration="2892000" />
       <workItem from="1745145340786" duration="97000" />
-      <workItem from="1745145441697" duration="704000" />
+      <workItem from="1745145441697" duration="6033000" />
     </task>
     <task id="LOCAL-00001" summary="Обновить схему">
       <option name="closed" value="true" />
