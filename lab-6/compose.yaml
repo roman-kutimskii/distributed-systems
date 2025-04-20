@@ -71,6 +71,8 @@
       interval: 10s
       timeout: 5s
       retries: 5
+    ports:
+      - "6379:6379"
   
   redis-ru:
     image: redis
@@ -81,6 +83,8 @@
       interval: 10s
       timeout: 5s
       retries: 5
+    ports:
+      - "6380:6379"
   
   redis-eu:
     image: redis
@@ -91,6 +95,8 @@
       interval: 10s
       timeout: 5s
       retries: 5
+    ports:
+      - "6381:6379"
   
   redis-asia:
     image: redis
@@ -101,6 +107,8 @@
       interval: 10s
       timeout: 5s
       retries: 5
+    ports:
+      - "6382:6379"
   
   rabbitmq:
     image: rabbitmq:management
