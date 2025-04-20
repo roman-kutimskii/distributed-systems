@@ -7,12 +7,23 @@
       context: .
       dockerfile: Valuator/Dockerfile
     depends_on:
-      redis:
+      redis-main:
+        condition: service_healthy
+      redis-ru:
+        condition: service_healthy
+      redis-eu:
+        condition: service_healthy
+      redis-asia:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
       centrifugo:
         condition: service_started
+    environment:
+      - DB_MAIN=redis-main:6379
+      - DB_RU=redis-ru:6379
+      - DB_EU=redis-eu:6379
+      - DB_ASIA=redis-asia:6379
 
   rankcalculator:
     image: rankcalculator
@@ -22,12 +33,23 @@
       context: .
       dockerfile: RankCalculator/Dockerfile
     depends_on:
-      redis:
+      redis-main:
+        condition: service_healthy
+      redis-ru:
+        condition: service_healthy
+      redis-eu:
+        condition: service_healthy
+      redis-asia:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
       centrifugo:
         condition: service_started
+    environment:
+      - DB_MAIN=redis-main:6379
+      - DB_RU=redis-ru:6379
+      - DB_EU=redis-eu:6379
+      - DB_ASIA=redis-asia:6379
   
   eventslogger:
     image: eventslogger
@@ -40,10 +62,40 @@
       rabbitmq:
         condition: service_healthy
 
-  redis:
+  redis-main:
     image: redis
     volumes:
-      - redis-data:/data
+      - redis-main-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+  redis-ru:
+    image: redis
+    volumes:
+      - redis-ru-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+  redis-eu:
+    image: redis
+    volumes:
+      - redis-eu-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+  redis-asia:
+    image: redis
+    volumes:
+      - redis-asia-data:/data
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
@@ -82,5 +134,8 @@
       - "8000:8000"
 
 volumes:
-  redis-data:
+  redis-main-data:
+  redis-ru-data:
+  redis-eu-data:
+  redis-asia-data:
   rabbitmq-data:
