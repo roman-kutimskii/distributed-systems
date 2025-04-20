@@ -11,8 +11,24 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        var redis = await ConnectionMultiplexer.ConnectAsync("redis:6379");
-        var db = redis.GetDatabase();
+        var mainRedisConnection = Environment.GetEnvironmentVariable("DB_MAIN");
+        var mainRedis = await ConnectionMultiplexer.ConnectAsync(mainRedisConnection!);
+        var mainDb = mainRedis.GetDatabase();
+
+        var regionalRedisConnections = new Dictionary<string, IConnectionMultiplexer>();
+        var regionalDbs = new Dictionary<string, IDatabase>();
+
+        var ruRedisConnection = Environment.GetEnvironmentVariable("DB_RU");
+        var euRedisConnection = Environment.GetEnvironmentVariable("DB_EU");
+        var asiaRedisConnection = Environment.GetEnvironmentVariable("DB_ASIA");
+
+        regionalRedisConnections["RU"] = await ConnectionMultiplexer.ConnectAsync(ruRedisConnection!);
+        regionalRedisConnections["EU"] = await ConnectionMultiplexer.ConnectAsync(euRedisConnection!);
+        regionalRedisConnections["ASIA"] = await ConnectionMultiplexer.ConnectAsync(asiaRedisConnection!);
+
+        regionalDbs["RU"] = regionalRedisConnections["RU"].GetDatabase();
+        regionalDbs["EU"] = regionalRedisConnections["EU"].GetDatabase();
+        regionalDbs["ASIA"] = regionalRedisConnections["ASIA"].GetDatabase();
 
         var centrifugoService = new CentrifugoService();
 
@@ -27,27 +43,59 @@ internal class Program
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.ReceivedAsync += async (_, eventArgs) =>
         {
-            var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+            try
+            {
+                var textId = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
 
-            var text = await db.StringGetAsync("TEXT-" + message);
-            var textStr = text.ToString();
+                Console.WriteLine($"LOOKUP: {textId}, MAIN");
 
-            await Task.Delay(new Random().Next(3, 15) * 1000);
+                var regionValue = await mainDb.StringGetAsync($"REGION-{textId}");
 
-            var rank = CalculateRank(textStr);
+                if (!regionValue.HasValue)
+                {
+                    Console.WriteLine($"Region not found for text ID: {textId}");
+                    return;
+                }
 
-            await db.StringSetAsync("RANK-" + message, rank);
+                var region = regionValue.ToString();
 
-            await centrifugoService.PublishAsync($"text:{message}", rank.ToString(CultureInfo.InvariantCulture));
+                if (!regionalDbs.TryGetValue(region, out var regionalDb))
+                {
+                    Console.WriteLine($"Regional database not found for region: {region}");
+                    return;
+                }
 
-            var eventData = new { EventType = "RankCalculated", TextId = message, Rank = rank };
-            var eventJson = JsonSerializer.Serialize(eventData);
-            var eventBody = Encoding.UTF8.GetBytes(eventJson);
+                Console.WriteLine($"LOOKUP: {textId}, {region}");
 
-            await channel.BasicPublishAsync(
-                "events_exchange",
-                "",
-                eventBody);
+                var text = await regionalDb.StringGetAsync($"TEXT-{textId}");
+                if (!text.HasValue)
+                {
+                    Console.WriteLine($"Text not found in {region} database for ID: {textId}");
+                    return;
+                }
+
+                var textStr = text.ToString();
+
+                await Task.Delay(new Random().Next(3, 5) * 1000);
+
+                var rank = CalculateRank(textStr);
+
+                Console.WriteLine($"LOOKUP: {textId}, {region}");
+
+                await regionalDb.StringSetAsync($"RANK-{textId}", rank);
+
+                await centrifugoService.PublishAsync($"text:{textId}", rank.ToString(CultureInfo.InvariantCulture));
+
+                var eventData = new { EventType = "RankCalculated", TextId = textId, Rank = rank, Region = region };
+                var eventJson = JsonSerializer.Serialize(eventData);
+                var eventBody = Encoding.UTF8.GetBytes(eventJson);
+
+                await channel.BasicPublishAsync("events_exchange", "", eventBody);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error processing message: {ex.Message}");
+            }
         };
 
         await channel.BasicConsumeAsync("text_queue", true, consumer);

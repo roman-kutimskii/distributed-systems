@@ -48,7 +48,7 @@ public class RedisService : IRedisService
 
         var regionalDb = GetRegionalDb(region);
         await regionalDb.StringSetAsync($"TEXT-{id}", text);
-        
+
         _logger.LogInformation($"LOOKUP: {id}, {region}");
     }
 
@@ -56,7 +56,7 @@ public class RedisService : IRedisService
     {
         var regionalDb = GetRegionalDb(region);
         await regionalDb.StringSetAsync($"SIMILARITY-{id}", similarity);
-        
+
         _logger.LogInformation($"LOOKUP: {id}, {region}");
     }
 
@@ -66,7 +66,7 @@ public class RedisService : IRedisService
 
         var keys = regionalDb.Multiplexer.GetServer(regionalDb.Multiplexer.GetEndPoints().First())
             .Keys(pattern: "TEXT-*");
-        
+
         _logger.LogInformation($"LOOKUP: {id}, {region}");
 
         foreach (var key in keys)

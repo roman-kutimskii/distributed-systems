@@ -16,11 +16,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.lab-5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.lab-5/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RankCalculator/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RankCalculator/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Index.cshtml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Pages/Summary.cshtml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Valuator/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Valuator/Services/RedisService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Valuator/Services/RedisService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,7 +213,7 @@
       <workItem from="1744821882007" duration="666000" />
       <workItem from="1744867021590" duration="2892000" />
       <workItem from="1745145340786" duration="97000" />
-      <workItem from="1745145441697" duration="6033000" />
+      <workItem from="1745145441697" duration="7187000" />
     </task>
     <task id="LOCAL-00001" summary="Обновить схему">
       <option name="closed" value="true" />
