@@ -10,19 +10,36 @@ public class IndexModel(IRedisService redisService, IMessageQueueService message
     {
     }
 
-    public async Task<IActionResult> OnPost(string text)
+    public async Task<IActionResult> OnPost(string text, string country)
     {
         var id = Guid.NewGuid().ToString();
 
-        await redisService.SaveText(id, text);
+        var region = GetRegionByCountry(country);
 
-        var similarity = redisService.CalculateSimilarity(id, text);
-        await redisService.SaveSimilarity(id, similarity);
+        await redisService.SaveRegion(id, region);
+        
+        await redisService.SaveText(id, text, region);
+
+        var similarity = redisService.CalculateSimilarity(id, text, region);
+        await redisService.SaveSimilarity(id, similarity, region);
 
         await messageQueueService.PublishSimilarityCalculatedEventAsync(id, similarity);
 
         await messageQueueService.PublishMessageAsync("text_queue", id);
 
         return RedirectToPage("/Summary", new { id });
+    }
+
+    private string GetRegionByCountry(string country)
+    {
+        return country switch
+        {
+            "Russia" => "RU",
+            "France" => "EU",
+            "Germany" => "EU",
+            "UAE" => "ASIA",
+            "India" => "ASIA",
+            _ => throw new ArgumentException($"Unknown country: {country}")
+        };
     }
 }
