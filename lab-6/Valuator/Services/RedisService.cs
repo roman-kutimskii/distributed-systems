@@ -4,6 +4,7 @@ namespace Valuator.Services;
 
 public interface IRedisService
 {
+    Task SaveRegion(string id, string region);
     Task SaveText(string id, string text, string region);
     Task SaveSimilarity(string id, double similarity, string region);
     double CalculateSimilarity(string id, string text, string region);
@@ -40,12 +41,15 @@ public class RedisService : IRedisService
         return db;
     }
 
-    public async Task SaveText(string id, string text, string region)
+    public async Task SaveRegion(string id, string region)
     {
         await _mainRedisDb.StringSetAsync($"REGION-{id}", region);
 
         _logger.LogInformation($"LOOKUP: {id}, MAIN");
+    }
 
+    public async Task SaveText(string id, string text, string region)
+    {
         var regionalDb = GetRegionalDb(region);
         await regionalDb.StringSetAsync($"TEXT-{id}", text);
 
