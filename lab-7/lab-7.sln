@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Valuator", "Valuator\Valuat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsLogger", "EventsLogger\EventsLogger.csproj", "{92063669-40E7-42F7-A203-59858D6C9558}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RankCalculator.UnitTests", "tests\RankCalculator.UnitTests\RankCalculator.UnitTests.csproj", "{2D42CB04-703E-47AA-90DB-31D22589E324}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{92063669-40E7-42F7-A203-59858D6C9558}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92063669-40E7-42F7-A203-59858D6C9558}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92063669-40E7-42F7-A203-59858D6C9558}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D42CB04-703E-47AA-90DB-31D22589E324}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D42CB04-703E-47AA-90DB-31D22589E324}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D42CB04-703E-47AA-90DB-31D22589E324}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D42CB04-703E-47AA-90DB-31D22589E324}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

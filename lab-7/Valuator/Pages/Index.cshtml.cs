@@ -17,7 +17,7 @@ public class IndexModel(IRedisService redisService, IMessageQueueService message
         var region = GetRegionByCountry(country);
 
         await redisService.SaveRegion(id, region);
-        
+
         await redisService.SaveText(id, text, region);
 
         var similarity = redisService.CalculateSimilarity(id, text, region);

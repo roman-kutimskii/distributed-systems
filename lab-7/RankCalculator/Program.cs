@@ -7,6 +7,20 @@ using StackExchange.Redis;
 
 namespace RankCalculator;
 
+public class RankCalculator
+{
+    public static double CalculateRank(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return 0;
+
+        double count = 0;
+
+        foreach (var character in text) count += char.IsLetter(character) ? 1 : 0;
+
+        return 1 - count / text.Length;
+    }
+}
+
 internal class Program
 {
     private static async Task Main(string[] args)
@@ -78,7 +92,7 @@ internal class Program
 
                 await Task.Delay(new Random().Next(3, 5) * 1000);
 
-                var rank = CalculateRank(textStr);
+                var rank = RankCalculator.CalculateRank(textStr);
 
                 Console.WriteLine($"LOOKUP: {textId}, {region}");
 
@@ -101,16 +115,5 @@ internal class Program
         await channel.BasicConsumeAsync("text_queue", true, consumer);
 
         await Task.Delay(Timeout.Infinite);
-    }
-
-    private static double CalculateRank(string text)
-    {
-        if (string.IsNullOrEmpty(text)) return 0;
-
-        double count = 0;
-
-        foreach (var character in text) count += char.IsLetter(char.ToLower(character)) ? 1 : 0;
-
-        return 1 - count / text.Length;
     }
 }
