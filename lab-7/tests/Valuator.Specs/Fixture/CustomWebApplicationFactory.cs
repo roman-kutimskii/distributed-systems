@@ -13,7 +13,7 @@ public class CustomWebApplicationFactory<TEntryPoint>(string dbConnectionString)
         {
             configurationBuilder.AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "ConnectionStrings:MainConnection", dbConnectionString }
+                { "DB_MAIN", dbConnectionString }
             });
         });
 
