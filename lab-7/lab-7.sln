@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsLogger", "EventsLogge
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RankCalculator.UnitTests", "tests\RankCalculator.UnitTests\RankCalculator.UnitTests.csproj", "{2D42CB04-703E-47AA-90DB-31D22589E324}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValuatorSpecs", "tests\ValuatorSpecs\ValuatorSpecs.csproj", "{64308183-2370-4829-9AB5-5661EEBF6252}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Valuator.Specs", "tests\Valuator.Specs\Valuator.Specs.csproj", "{64308183-2370-4829-9AB5-5661EEBF6252}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
