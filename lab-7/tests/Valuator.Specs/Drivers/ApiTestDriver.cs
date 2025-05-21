@@ -1,6 +1,8 @@
-﻿namespace Valuator.Specs.Drivers;
+﻿using Valuator.Specs.Fixture;
 
-public class ApiTestDriver(HttpClient httpClient)
+namespace Valuator.Specs.Drivers;
+
+public class ApiTestDriver(ITestServerFixture fixture)
 {
-    
+    private HttpClient HttpClient => fixture.HttpClient;
 }

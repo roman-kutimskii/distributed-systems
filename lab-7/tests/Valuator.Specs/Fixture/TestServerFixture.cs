@@ -2,13 +2,7 @@
 
 namespace Valuator.Specs.Fixture;
 
-public class TestServerFixture
+public class TestServerFixture : ITestServerFixture
 {
-    public HttpClient HttpClient { get; }
-
-    public TestServerFixture()
-    {
-        WebApplicationFactory<Program> factory = new();
-        HttpClient = factory.CreateClient();
-    }
+    public HttpClient HttpClient => TestServerFixtureCore.Instance.HttpClient;
 }
