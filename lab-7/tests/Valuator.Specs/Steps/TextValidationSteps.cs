@@ -10,7 +10,6 @@ public class TextValidationSteps(TestServerFixture fixture)
 {
     private readonly ApiTestDriver _driver = new(fixture);
     private HttpResponseMessage? _response;
-    private string _textToValidate = string.Empty;
 
     [Given(@"I have the Valuator component")]
     public void GivenIHaveTheValuatorComponent()
@@ -21,7 +20,6 @@ public class TextValidationSteps(TestServerFixture fixture)
     [When(@"I submit the text ""(.*)"" for validation")]
     public async Task WhenISubmitTheTextForValidation(string text)
     {
-        _textToValidate = text;
         _response = await _driver.SubmitText(text);
     }
 
