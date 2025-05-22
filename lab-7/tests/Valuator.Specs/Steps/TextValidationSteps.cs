@@ -1,5 +1,6 @@
 ﻿using Reqnroll;
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 using Valuator.Specs.Drivers;
 using Valuator.Specs.Fixture;
 
@@ -32,10 +33,23 @@ public class TextValidationSteps(TestServerFixture fixture)
     }
 
     [Then(@"I should receive a validation response")]
-    public void ThenIShouldReceiveAValidationResponse()
+    public async Task ThenIShouldReceiveAValidationResponse()
     {
-        Assert.NotNull(_response);
+        var content = await _response!.Content.ReadAsStringAsync();
+
+        Assert.NotNull(content);
         Assert.True(_response!.IsSuccessStatusCode,
             $"Expected successful status code but got {_response.StatusCode}");
+
+        var similarityValue = ExtractSimilarityValue(content);
+        Assert.Equal("0", similarityValue);
+    }
+
+    private static string? ExtractSimilarityValue(string content)
+    {
+        Regex regex = new("<span id=\"similarity-value\">(.*?)</span>");
+        var match = regex.Match(content);
+
+        return match is { Success: true, Groups.Count: > 1 } ? match.Groups[1].Value : null;
     }
 }
