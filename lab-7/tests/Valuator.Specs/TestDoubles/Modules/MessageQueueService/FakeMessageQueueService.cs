@@ -7,11 +7,11 @@ public class FakeMessageQueueService : IMessageQueueService
 {
     public Task PublishMessageAsync(string queueName, string message)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task PublishSimilarityCalculatedEventAsync(string textId, double similarity)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }

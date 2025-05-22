@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-
-namespace Valuator.Specs.Fixture;
+﻿namespace Valuator.Specs.Fixture;
 
 public class TestServerFixture : ITestServerFixture
 {

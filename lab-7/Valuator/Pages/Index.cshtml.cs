@@ -4,6 +4,7 @@ using Valuator.Services;
 
 namespace Valuator.Pages;
 
+[IgnoreAntiforgeryToken]
 public class IndexModel(IRedisService redisService, IMessageQueueService messageQueueService) : PageModel
 {
     public void OnGet()

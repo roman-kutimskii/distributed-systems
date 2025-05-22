@@ -7,7 +7,11 @@ using Valuator.Specs.TestDoubles.Modules.MessageQueueService;
 
 namespace Valuator.Specs.Fixture;
 
-public class CustomWebApplicationFactory<TEntryPoint>(string dbConnectionString)
+public class CustomWebApplicationFactory<TEntryPoint>(
+    string mainConnectionString,
+    string ruConnectionString,
+    string euConnectionString,
+    string asiaConnectionString)
     : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
 {
     protected override IHost CreateHost(IHostBuilder builder)
@@ -16,7 +20,10 @@ public class CustomWebApplicationFactory<TEntryPoint>(string dbConnectionString)
         {
             configurationBuilder.AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "DB_MAIN", dbConnectionString }
+                { "DB_MAIN", mainConnectionString },
+                { "DB_RU", ruConnectionString },
+                { "DB_EU", euConnectionString },
+                { "DB_ASIA", asiaConnectionString }
             });
         });
 
@@ -25,10 +32,7 @@ public class CustomWebApplicationFactory<TEntryPoint>(string dbConnectionString)
             var descriptor = services.SingleOrDefault(d =>
                 d.ServiceType == typeof(IMessageQueueService));
 
-            if (descriptor != null)
-            {
-                services.Remove(descriptor);
-            }
+            if (descriptor != null) services.Remove(descriptor);
 
             services.AddSingleton<IMessageQueueService, FakeMessageQueueService>();
         });

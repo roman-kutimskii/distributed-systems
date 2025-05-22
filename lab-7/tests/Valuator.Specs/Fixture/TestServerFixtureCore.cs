@@ -10,7 +10,19 @@ public class TestServerFixtureCore
 
     private HttpClient? _httpClient;
 
-    private readonly RedisContainer _container = new RedisBuilder()
+    private readonly RedisContainer _containerMain = new RedisBuilder()
+        .WithImage("redis")
+        .Build();
+
+    private readonly RedisContainer _containerRu = new RedisBuilder()
+        .WithImage("redis")
+        .Build();
+
+    private readonly RedisContainer _containerEu = new RedisBuilder()
+        .WithImage("redis")
+        .Build();
+
+    private readonly RedisContainer _containerAsia = new RedisBuilder()
         .WithImage("redis")
         .Build();
 
@@ -21,22 +33,36 @@ public class TestServerFixtureCore
     }
 
     [BeforeTestRun]
-    public static Task BeforeTestRun() => Instance.InitializeAsync();
+    public static Task BeforeTestRun()
+    {
+        return Instance.InitializeAsync();
+    }
 
     [AfterTestRun]
-    public static Task AfterTestRun() => Instance.DisposeAsync();
+    public static Task AfterTestRun()
+    {
+        return Instance.DisposeAsync();
+    }
 
     private async Task InitializeAsync()
     {
-        await _container.StartAsync();
+        await _containerMain.StartAsync();
+        await _containerRu.StartAsync();
+        await _containerEu.StartAsync();
+        await _containerAsia.StartAsync();
 
-        CustomWebApplicationFactory<Program> factory = new(_container.GetConnectionString());
+        CustomWebApplicationFactory<Program> factory = new(_containerMain.GetConnectionString(),
+            _containerRu.GetConnectionString(), _containerEu.GetConnectionString(),
+            _containerAsia.GetConnectionString());
         _httpClient = factory.CreateClient();
     }
 
     private async Task DisposeAsync()
     {
         _httpClient = null;
-        await _container.DisposeAsync();
+        await _containerMain.DisposeAsync();
+        await _containerRu.DisposeAsync();
+        await _containerEu.DisposeAsync();
+        await _containerAsia.DisposeAsync();
     }
 }

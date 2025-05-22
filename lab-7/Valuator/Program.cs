@@ -12,7 +12,6 @@ var redis = ConnectionMultiplexer.Connect(builder.Configuration["DB_MAIN"]!);
 builder.Services.AddDataProtection().PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys")
     .SetApplicationName("Valuator");
 
-
 try
 {
     var factory = new ConnectionFactory { HostName = "rabbitmq" };
