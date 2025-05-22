@@ -48,7 +48,7 @@ public class TestServerFixtureCore
     [BeforeScenario]
     public static Task BeforeScenario()
     {
-        return FlushAllRedisDatabases();
+        return Instance.FlushAllRedisDatabases();
     }
     
     private async Task InitializeAsync()
@@ -73,19 +73,22 @@ public class TestServerFixtureCore
         await _containerAsia.DisposeAsync();
     }
     
-    private static async Task FlushAllRedisDatabases()
+    private async Task FlushAllRedisDatabases()
     {
         var connectionStrings = new[]
         {
-            Instance._containerMain.GetConnectionString(),
-            Instance._containerRu.GetConnectionString(),
-            Instance._containerEu.GetConnectionString(),
-            Instance._containerAsia.GetConnectionString()
+            _containerMain.GetConnectionString(),
+            _containerRu.GetConnectionString(),
+            _containerEu.GetConnectionString(),
+            _containerAsia.GetConnectionString()
         };
 
         foreach (var connectionString in connectionStrings)
         {
-            var redis = await ConnectionMultiplexer.ConnectAsync(connectionString);
+            var options = ConfigurationOptions.Parse(connectionString);
+            options.AllowAdmin = true;
+
+            var redis = await ConnectionMultiplexer.ConnectAsync(options);
             var server = redis.GetServer(redis.GetEndPoints().First());
             await server.FlushAllDatabasesAsync();
         }
