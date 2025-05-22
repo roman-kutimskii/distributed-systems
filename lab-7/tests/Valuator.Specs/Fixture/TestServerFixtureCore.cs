@@ -1,4 +1,5 @@
 ﻿using Reqnroll;
+using StackExchange.Redis;
 using Testcontainers.Redis;
 
 namespace Valuator.Specs.Fixture;
@@ -44,6 +45,12 @@ public class TestServerFixtureCore
         return Instance.DisposeAsync();
     }
 
+    [BeforeScenario]
+    public static Task BeforeScenario()
+    {
+        return FlushAllRedisDatabases();
+    }
+    
     private async Task InitializeAsync()
     {
         await _containerMain.StartAsync();
@@ -65,4 +72,23 @@ public class TestServerFixtureCore
         await _containerEu.DisposeAsync();
         await _containerAsia.DisposeAsync();
     }
+    
+    private static async Task FlushAllRedisDatabases()
+    {
+        var connectionStrings = new[]
+        {
+            Instance._containerMain.GetConnectionString(),
+            Instance._containerRu.GetConnectionString(),
+            Instance._containerEu.GetConnectionString(),
+            Instance._containerAsia.GetConnectionString()
+        };
+
+        foreach (var connectionString in connectionStrings)
+        {
+            var redis = await ConnectionMultiplexer.ConnectAsync(connectionString);
+            var server = redis.GetServer(redis.GetEndPoints().First());
+            await server.FlushAllDatabasesAsync();
+        }
+    }
+
 }
