@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,8 +36,10 @@ public class CustomWebApplicationFactory<TEntryPoint>(
             if (descriptor != null) services.Remove(descriptor);
 
             services.AddSingleton<IMessageQueueService, FakeMessageQueueService>();
-        });
 
+            services.AddDataProtection()
+                .UseEphemeralDataProtectionProvider();
+        });
 
         return base.CreateHost(builder);
     }
