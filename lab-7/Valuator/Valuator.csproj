@@ -14,10 +14,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.3"/>
-        <PackageReference Include="NRedisStack" Version="0.13.2"/>
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.16" />
+        <PackageReference Include="NRedisStack" Version="1.0.0" />
         <PackageReference Include="RabbitMQ.Client" Version="7.1.2"/>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0"/>
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.11.0" />
     </ItemGroup>
 
     <ItemGroup>

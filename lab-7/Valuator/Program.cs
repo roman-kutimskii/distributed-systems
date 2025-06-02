@@ -12,9 +12,15 @@ var redis = ConnectionMultiplexer.Connect(builder.Configuration["DB_MAIN"]!);
 builder.Services.AddDataProtection().PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys")
     .SetApplicationName("Valuator");
 
-var factory = new ConnectionFactory { HostName = "rabbitmq" };
-var rabbitMqConnection = await factory.CreateConnectionAsync();
-builder.Services.AddSingleton(rabbitMqConnection);
+try
+{
+    var factory = new ConnectionFactory { HostName = "rabbitmq" };
+    var rabbitMqConnection = await factory.CreateConnectionAsync();
+    builder.Services.AddSingleton(rabbitMqConnection);
+}
+catch
+{
+}
 
 builder.Services.AddSingleton<IRedisService, RedisService>();
 builder.Services.AddSingleton<IMessageQueueService, MessageQueueService>();
@@ -38,3 +44,5 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+
+public partial class Program;
