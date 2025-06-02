@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="RD-243.26053.56">
+    <data-source name="redis-main" uuid="b7fb79f5-e8c6-430f-a4ba-57e81ed129ea">
+      <database-info product="Redis Standalone" version="7.4.2" jdbc-version="4.2" driver-name="Redis JDBC Driver" driver-version="1.5" dbms="REDIS" exact-version="7.4.2" exact-driver-version="1.5">
+        <jdbc-catalog-is-schema>true</jdbc-catalog-is-schema>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" qname="@" />
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="redis-ru" uuid="17ea88dd-46f5-468b-a82d-ee9a34b31152">
+      <database-info product="Redis Standalone" version="7.4.2" jdbc-version="4.2" driver-name="Redis JDBC Driver" driver-version="1.5" dbms="REDIS" exact-version="7.4.2" exact-driver-version="1.5">
+        <jdbc-catalog-is-schema>true</jdbc-catalog-is-schema>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" qname="@" />
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="redis-eu" uuid="e704123e-b268-4e7a-be4b-125d4e524d20">
+      <database-info product="Redis Standalone" version="7.4.2" jdbc-version="4.2" driver-name="Redis JDBC Driver" driver-version="1.5" dbms="REDIS" exact-version="7.4.2" exact-driver-version="1.5">
+        <jdbc-catalog-is-schema>true</jdbc-catalog-is-schema>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" qname="@" />
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="redis-asia" uuid="c3d4081b-493b-4ffd-95de-c60dcb2f6b57">
+      <database-info product="Redis Standalone" version="7.4.2" jdbc-version="4.2" driver-name="Redis JDBC Driver" driver-version="1.5" dbms="REDIS" exact-version="7.4.2" exact-driver-version="1.5">
+        <jdbc-catalog-is-schema>true</jdbc-catalog-is-schema>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" qname="@" />
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+  </component>
+</project>
