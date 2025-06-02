@@ -22,14 +22,19 @@ public class RedisService : IRedisService
     {
         _logger = logger;
 
-        var mainRedis = ConnectionMultiplexer.Connect(configuration["DB_MAIN"]!);
+        var redisPassword = configuration["REDIS_PASSWORD"];
+
+        var mainRedis = ConnectionMultiplexer.Connect(CreateConnectionString(configuration["DB_MAIN"]!, redisPassword));
         _mainRedisDb = mainRedis.GetDatabase();
 
         _regionalDbs = new Dictionary<string, IDatabase>
         {
-            ["RU"] = ConnectionMultiplexer.Connect(configuration["DB_RU"]!).GetDatabase(),
-            ["EU"] = ConnectionMultiplexer.Connect(configuration["DB_EU"]!).GetDatabase(),
-            ["ASIA"] = ConnectionMultiplexer.Connect(configuration["DB_ASIA"]!).GetDatabase()
+            ["RU"] = ConnectionMultiplexer.Connect(CreateConnectionString(configuration["DB_RU"]!, redisPassword))
+                .GetDatabase(),
+            ["EU"] = ConnectionMultiplexer.Connect(CreateConnectionString(configuration["DB_EU"]!, redisPassword))
+                .GetDatabase(),
+            ["ASIA"] = ConnectionMultiplexer.Connect(CreateConnectionString(configuration["DB_ASIA"]!, redisPassword))
+                .GetDatabase()
         };
     }
 
@@ -92,5 +97,10 @@ public class RedisService : IRedisService
         _logger.LogInformation($"LOOKUP: {id}, MAIN");
 
         return region;
+    }
+
+    private static string CreateConnectionString(string hostAndPort, string? password)
+    {
+        return string.IsNullOrEmpty(password) ? hostAndPort : $"{hostAndPort},password={password}";
     }
 }

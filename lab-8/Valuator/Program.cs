@@ -8,13 +8,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-var redis = ConnectionMultiplexer.Connect(builder.Configuration["DB_MAIN"]!);
+// Create Redis connection with authentication
+var redisPassword = builder.Configuration["REDIS_PASSWORD"];
+var redisConnectionString = string.IsNullOrEmpty(redisPassword)
+    ? builder.Configuration["DB_MAIN"]!
+    : $"{builder.Configuration["DB_MAIN"]!},password={redisPassword}";
+
+var redis = ConnectionMultiplexer.Connect(redisConnectionString);
 builder.Services.AddDataProtection().PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys")
     .SetApplicationName("Valuator");
 
 try
 {
-    var factory = new ConnectionFactory { HostName = "rabbitmq" };
+    // Create RabbitMQ connection with authentication
+    var factory = new ConnectionFactory
+    {
+        HostName = "rabbitmq",
+        UserName = builder.Configuration["RABBITMQ_USERNAME"] ?? "guest",
+        Password = builder.Configuration["RABBITMQ_PASSWORD"] ?? "guest"
+    };
     var rabbitMqConnection = await factory.CreateConnectionAsync();
     builder.Services.AddSingleton(rabbitMqConnection);
 }

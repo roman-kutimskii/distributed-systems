@@ -11,7 +11,12 @@ internal class Program
     {
         Console.WriteLine("Starting EventsLogger...");
 
-        var factory = new ConnectionFactory { HostName = "rabbitmq" };
+        var factory = new ConnectionFactory
+        {
+            HostName = "rabbitmq",
+            UserName = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest",
+            Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest"
+        };
         await using var connection = await factory.CreateConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 

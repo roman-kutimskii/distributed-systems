@@ -24,6 +24,9 @@
       - DB_RU=redis-ru:6379
       - DB_EU=redis-eu:6379
       - DB_ASIA=redis-asia:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
   rankcalculator:
     image: rankcalculator
@@ -50,6 +53,9 @@
       - DB_RU=redis-ru:6379
       - DB_EU=redis-eu:6379
       - DB_ASIA=redis-asia:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
   
   eventslogger:
     image: eventslogger
@@ -61,13 +67,16 @@
     depends_on:
       rabbitmq:
         condition: service_healthy
-
+    environment:
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
   redis-main:
     image: redis
     volumes:
       - redis-main-data:/data
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -78,8 +87,9 @@
     image: redis
     volumes:
       - redis-ru-data:/data
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -90,8 +100,9 @@
     image: redis
     volumes:
       - redis-eu-data:/data
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -102,8 +113,9 @@
     image: redis
     volumes:
       - redis-asia-data:/data
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -112,6 +124,9 @@
   
   rabbitmq:
     image: rabbitmq:management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
     ports:
       - "15672:15672"
     volumes:
