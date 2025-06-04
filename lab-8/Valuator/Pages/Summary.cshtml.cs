@@ -9,18 +9,8 @@ using Valuator.Services;
 
 namespace Valuator.Pages;
 
-[Authorize]
-public class SummaryModel : PageModel
+public class SummaryModel(IRedisService redisService, ILogger<SummaryModel> logger) : PageModel
 {
-    private readonly ILogger<SummaryModel> _logger;
-    private readonly IRedisService _redisService;
-
-    public SummaryModel(IRedisService redisService, ILogger<SummaryModel> logger)
-    {
-        _redisService = redisService;
-        _logger = logger;
-    }
-
     public double? Rank { get; private set; }
     public double Similarity { get; private set; }
 
@@ -29,8 +19,7 @@ public class SummaryModel : PageModel
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userId)) return RedirectToPage("/Login");
 
-        // Check if user is the author of the text
-        var authorId = await _redisService.GetTextAuthor(id);
+        var authorId = await redisService.GetTextAuthor(id);
         if (authorId != userId) return RedirectToPage("/AccessDenied");
 
         await TryGetData(id);
@@ -42,8 +31,7 @@ public class SummaryModel : PageModel
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userId)) return new JsonResult(new { error = "Unauthorized" }) { StatusCode = 401 };
 
-        // Check if user is the author of the text
-        var authorId = await _redisService.GetTextAuthor(id);
+        var authorId = await redisService.GetTextAuthor(id);
         if (authorId != userId) return new JsonResult(new { error = "Access denied" }) { StatusCode = 403 };
 
         await TryGetData(id);
@@ -59,10 +47,10 @@ public class SummaryModel : PageModel
     {
         try
         {
-            var region = await _redisService.GetRegionForId(id);
+            var region = await redisService.GetRegionForId(id);
 
 
-            var regionalDb = _redisService.GetRegionalDb(region);
+            var regionalDb = redisService.GetRegionalDb(region);
 
             var rankValue = await regionalDb.StringGetAsync("RANK-" + id);
             if (rankValue.HasValue && double.TryParse(rankValue.ToString(), out var rank)) Rank = rank;
@@ -71,11 +59,11 @@ public class SummaryModel : PageModel
             if (similarityValue.HasValue && double.TryParse(similarityValue.ToString(), out var similarity))
                 Similarity = similarity;
 
-            _logger.LogInformation($"LOOKUP: {id}, {region}");
+            logger.LogInformation($"LOOKUP: {id}, {region}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error retrieving data for ID {id}");
+            logger.LogError(ex, $"Error retrieving data for ID {id}");
         }
     }
 
