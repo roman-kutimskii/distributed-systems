@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +9,7 @@ using Valuator.Services;
 
 namespace Valuator.Pages;
 
+[Authorize]
 public class SummaryModel : PageModel
 {
     private readonly ILogger<SummaryModel> _logger;
@@ -22,13 +24,28 @@ public class SummaryModel : PageModel
     public double? Rank { get; private set; }
     public double Similarity { get; private set; }
 
-    public async Task OnGet(string id)
+    public async Task<IActionResult> OnGet(string id)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId)) return RedirectToPage("/Login");
+
+        // Check if user is the author of the text
+        var authorId = await _redisService.GetTextAuthor(id);
+        if (authorId != userId) return RedirectToPage("/AccessDenied");
+
         await TryGetData(id);
+        return Page();
     }
 
     public async Task<JsonResult> OnGetCheckData(string id)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId)) return new JsonResult(new { error = "Unauthorized" }) { StatusCode = 401 };
+
+        // Check if user is the author of the text
+        var authorId = await _redisService.GetTextAuthor(id);
+        if (authorId != userId) return new JsonResult(new { error = "Access denied" }) { StatusCode = 403 };
+
         await TryGetData(id);
 
         return new JsonResult(new

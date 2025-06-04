@@ -13,10 +13,7 @@ public static class AntiForgeryTokenExtractor
 
         var match = Regex.Match(content, @"<input[^>]*name=""__RequestVerificationToken""[^>]*value=""([^""]+)""");
 
-        if (!match.Success)
-        {
-            throw new InvalidOperationException("Unable to find antiforgery token on the page");
-        }
+        if (!match.Success) throw new InvalidOperationException("Unable to find antiforgery token on the page");
 
         return match.Groups[1].Value;
     }
