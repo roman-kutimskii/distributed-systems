@@ -81,7 +81,7 @@
       timeout: 5s
       retries: 5
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
   
   redis-ru:
     image: redis
@@ -94,7 +94,7 @@
       timeout: 5s
       retries: 5
     ports:
-      - "6380:6379"
+      - "127.0.0.1:6380:6379"
   
   redis-eu:
     image: redis
@@ -107,7 +107,7 @@
       timeout: 5s
       retries: 5
     ports:
-      - "6381:6379"
+      - "127.0.0.1:6381:6379"
   
   redis-asia:
     image: redis
@@ -120,7 +120,7 @@
       timeout: 5s
       retries: 5
     ports:
-      - "6382:6379"
+      - "127.0.0.1:6382:6379"
   
   rabbitmq:
     image: rabbitmq:management
@@ -128,7 +128,7 @@
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
     ports:
-      - "15672:15672"
+      - "127.0.0.1:15672:15672"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     healthcheck:
@@ -154,7 +154,7 @@
       - ./centrifugo/config.json:/centrifugo/config.json
     command: centrifugo -c config.json
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
 
 volumes:
   redis-main-data:
