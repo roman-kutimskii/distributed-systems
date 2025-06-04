@@ -15,7 +15,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.16" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
         <PackageReference Include="Reqnroll" Version="2.4.1" />
         <PackageReference Include="Reqnroll.xUnit" Version="2.4.1" />
         <PackageReference Include="Testcontainers.Redis" Version="4.4.0" />
