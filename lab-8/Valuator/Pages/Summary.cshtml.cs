@@ -19,7 +19,15 @@ public class SummaryModel(IRedisService redisService, ILogger<SummaryModel> logg
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userId)) return RedirectToPage("/Login");
 
-        var authorId = await redisService.GetTextAuthor(id);
+        string? authorId;
+        try
+        {
+            authorId = await redisService.GetTextAuthor(id);
+        }
+        catch (KeyNotFoundException)
+        {
+            return RedirectToPage("/AccessDenied");
+        }
         if (authorId != userId) return RedirectToPage("/AccessDenied");
 
         await TryGetData(id);
