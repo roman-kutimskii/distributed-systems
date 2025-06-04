@@ -1,2 +1,5 @@
 ﻿# Generated files
 *.feature.cs
+
+# Environment files
+.env

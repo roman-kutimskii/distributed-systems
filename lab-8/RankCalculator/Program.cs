@@ -25,8 +25,11 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
+        var redisPassword = Environment.GetEnvironmentVariable("REDIS_PASSWORD");
+
         var mainRedisConnection = Environment.GetEnvironmentVariable("DB_MAIN");
-        var mainRedis = await ConnectionMultiplexer.ConnectAsync(mainRedisConnection!);
+        var mainRedisConnectionString = CreateConnectionString(mainRedisConnection!, redisPassword);
+        var mainRedis = await ConnectionMultiplexer.ConnectAsync(mainRedisConnectionString);
         var mainDb = mainRedis.GetDatabase();
 
         var regionalRedisConnections = new Dictionary<string, IConnectionMultiplexer>();
@@ -36,9 +39,13 @@ internal class Program
         var euRedisConnection = Environment.GetEnvironmentVariable("DB_EU");
         var asiaRedisConnection = Environment.GetEnvironmentVariable("DB_ASIA");
 
-        regionalRedisConnections["RU"] = await ConnectionMultiplexer.ConnectAsync(ruRedisConnection!);
-        regionalRedisConnections["EU"] = await ConnectionMultiplexer.ConnectAsync(euRedisConnection!);
-        regionalRedisConnections["ASIA"] = await ConnectionMultiplexer.ConnectAsync(asiaRedisConnection!);
+        var ruConnectionString = CreateConnectionString(ruRedisConnection!, redisPassword);
+        var euConnectionString = CreateConnectionString(euRedisConnection!, redisPassword);
+        var asiaConnectionString = CreateConnectionString(asiaRedisConnection!, redisPassword);
+
+        regionalRedisConnections["RU"] = await ConnectionMultiplexer.ConnectAsync(ruConnectionString);
+        regionalRedisConnections["EU"] = await ConnectionMultiplexer.ConnectAsync(euConnectionString);
+        regionalRedisConnections["ASIA"] = await ConnectionMultiplexer.ConnectAsync(asiaConnectionString);
 
         regionalDbs["RU"] = regionalRedisConnections["RU"].GetDatabase();
         regionalDbs["EU"] = regionalRedisConnections["EU"].GetDatabase();
@@ -46,7 +53,12 @@ internal class Program
 
         var centrifugoService = new CentrifugoService();
 
-        var factory = new ConnectionFactory { HostName = "rabbitmq" };
+        var factory = new ConnectionFactory
+        {
+            HostName = "rabbitmq",
+            UserName = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest",
+            Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest"
+        };
         await using var connection = await factory.CreateConnectionAsync();
         var channel = await connection.CreateChannelAsync();
 
@@ -115,5 +127,10 @@ internal class Program
         await channel.BasicConsumeAsync("text_queue", true, consumer);
 
         await Task.Delay(Timeout.Infinite);
+    }
+
+    private static string CreateConnectionString(string hostAndPort, string? password)
+    {
+        return string.IsNullOrEmpty(password) ? hostAndPort : $"{hostAndPort},password={password}";
     }
 }

@@ -1,6 +1,5 @@
-﻿using Reqnroll;
-using System.Net.Http.Json;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using Reqnroll;
 using Valuator.Specs.Drivers;
 using Valuator.Specs.Fixture;
 

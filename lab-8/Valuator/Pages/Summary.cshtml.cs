@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
@@ -8,27 +9,39 @@ using Valuator.Services;
 
 namespace Valuator.Pages;
 
-public class SummaryModel : PageModel
+public class SummaryModel(IRedisService redisService, ILogger<SummaryModel> logger) : PageModel
 {
-    private readonly ILogger<SummaryModel> _logger;
-    private readonly IRedisService _redisService;
-
-    public SummaryModel(IRedisService redisService, ILogger<SummaryModel> logger)
-    {
-        _redisService = redisService;
-        _logger = logger;
-    }
-
     public double? Rank { get; private set; }
     public double Similarity { get; private set; }
 
-    public async Task OnGet(string id)
+    public async Task<IActionResult> OnGet(string id)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId)) return RedirectToPage("/Login");
+
+        string? authorId;
+        try
+        {
+            authorId = await redisService.GetTextAuthor(id);
+        }
+        catch (KeyNotFoundException)
+        {
+            return RedirectToPage("/AccessDenied");
+        }
+        if (authorId != userId) return RedirectToPage("/AccessDenied");
+
         await TryGetData(id);
+        return Page();
     }
 
     public async Task<JsonResult> OnGetCheckData(string id)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId)) return new JsonResult(new { error = "Unauthorized" }) { StatusCode = 401 };
+
+        var authorId = await redisService.GetTextAuthor(id);
+        if (authorId != userId) return new JsonResult(new { error = "Access denied" }) { StatusCode = 403 };
+
         await TryGetData(id);
 
         return new JsonResult(new
@@ -42,10 +55,10 @@ public class SummaryModel : PageModel
     {
         try
         {
-            var region = await _redisService.GetRegionForId(id);
+            var region = await redisService.GetRegionForId(id);
 
 
-            var regionalDb = _redisService.GetRegionalDb(region);
+            var regionalDb = redisService.GetRegionalDb(region);
 
             var rankValue = await regionalDb.StringGetAsync("RANK-" + id);
             if (rankValue.HasValue && double.TryParse(rankValue.ToString(), out var rank)) Rank = rank;
@@ -54,11 +67,11 @@ public class SummaryModel : PageModel
             if (similarityValue.HasValue && double.TryParse(similarityValue.ToString(), out var similarity))
                 Similarity = similarity;
 
-            _logger.LogInformation($"LOOKUP: {id}, {region}");
+            logger.LogInformation($"LOOKUP: {id}, {region}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error retrieving data for ID {id}");
+            logger.LogError(ex, $"Error retrieving data for ID {id}");
         }
     }
 

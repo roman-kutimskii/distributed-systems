@@ -9,7 +9,13 @@ public class TestServerFixtureCore
 {
     public static readonly TestServerFixtureCore Instance = new();
 
-    private HttpClient? _httpClient;
+    private readonly RedisContainer _containerAsia = new RedisBuilder()
+        .WithImage("redis")
+        .Build();
+
+    private readonly RedisContainer _containerEu = new RedisBuilder()
+        .WithImage("redis")
+        .Build();
 
     private readonly RedisContainer _containerMain = new RedisBuilder()
         .WithImage("redis")
@@ -19,19 +25,13 @@ public class TestServerFixtureCore
         .WithImage("redis")
         .Build();
 
-    private readonly RedisContainer _containerEu = new RedisBuilder()
-        .WithImage("redis")
-        .Build();
-
-    private readonly RedisContainer _containerAsia = new RedisBuilder()
-        .WithImage("redis")
-        .Build();
-
-    public HttpClient HttpClient => _httpClient ?? throw new InvalidOperationException("Fixture was not initialized");
+    private HttpClient? _httpClient;
 
     private TestServerFixtureCore()
     {
     }
+
+    public HttpClient HttpClient => _httpClient ?? throw new InvalidOperationException("Fixture was not initialized");
 
     [BeforeTestRun]
     public static Task BeforeTestRun()
@@ -50,7 +50,7 @@ public class TestServerFixtureCore
     {
         return Instance.FlushAllRedisDatabases();
     }
-    
+
     private async Task InitializeAsync()
     {
         await _containerMain.StartAsync();
@@ -72,7 +72,7 @@ public class TestServerFixtureCore
         await _containerEu.DisposeAsync();
         await _containerAsia.DisposeAsync();
     }
-    
+
     private async Task FlushAllRedisDatabases()
     {
         var connectionStrings = new[]
@@ -93,5 +93,4 @@ public class TestServerFixtureCore
             await server.FlushAllDatabasesAsync();
         }
     }
-
 }
